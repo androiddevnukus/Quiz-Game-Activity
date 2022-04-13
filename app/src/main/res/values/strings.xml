@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">My Quiz Game</string>
-    <string name="action_header_name">Live Quiz</string>
+    <string name="action_header_name">Capital Quiz</string>
+    <string name="tv_congratulations">Congrats! You Win</string>
+    <string name="tv_result_again">Play again</string>
+    <string name="menu">Menu</string>
+    <string name="next">Next</string>
+    <string name="btn_go_to_quizactivity">Play</string>
 </resources>

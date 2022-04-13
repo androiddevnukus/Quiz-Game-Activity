@@ -5,10 +5,14 @@
       <map>
         <entry key="..\:/Users/Rasul/AndroidStudioProjects/MyQuizGame/app/src/main/res/drawable/ic_back.xml" value="0.319" />
         <entry key="..\:/Users/Rasul/AndroidStudioProjects/MyQuizGame/app/src/main/res/drawable/play_again_gradient.xml" value="0.319" />
+        <entry key="..\:/Users/Rasul/AndroidStudioProjects/MyQuizGame/app/src/main/res/drawable/quiz_button_design.xml" value="0.1125" />
+        <entry key="..\:/Users/Rasul/AndroidStudioProjects/MyQuizGame/app/src/main/res/drawable/right_answer.xml" value="0.248" />
         <entry key="..\:/Users/Rasul/AndroidStudioProjects/MyQuizGame/app/src/main/res/drawable/statistic_gradient.xml" value="0.319" />
-        <entry key="..\:/Users/Rasul/AndroidStudioProjects/MyQuizGame/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Rasul/AndroidStudioProjects/MyQuizGame/app/src/main/res/drawable/wrong_answer.xml" value="0.248" />
+        <entry key="..\:/Users/Rasul/AndroidStudioProjects/MyQuizGame/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/Rasul/AndroidStudioProjects/MyQuizGame/app/src/main/res/layout/activity_quiz.xml" value="0.33" />
-        <entry key="..\:/Users/Rasul/AndroidStudioProjects/MyQuizGame/app/src/main/res/layout/activity_result.xml" value="0.1" />
+        <entry key="..\:/Users/Rasul/AndroidStudioProjects/MyQuizGame/app/src/main/res/layout/activity_result.xml" value="0.22" />
+        <entry key="..\:/Users/Rasul/AndroidStudioProjects/MyQuizGame/app/src/main/res/layout/fragment_quiz.xml" value="0.14722222222222223" />
       </map>
     </option>
   </component>

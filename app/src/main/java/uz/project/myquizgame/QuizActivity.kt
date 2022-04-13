@@ -3,48 +3,82 @@ package uz.project.myquizgame
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import uz.project.myquizgame.databinding.ActivityQuizBinding
+import java.lang.Boolean.FALSE
 
 
 class QuizActivity : AppCompatActivity() {
+
     var mCountDownTimer: CountDownTimer? = null
     var i = 0
-    private var CurrentQuestion = 1
+    var mCurrentQuestion = 1
     private lateinit var binding: ActivityQuizBinding
+
+    private val maxNumberOfQuestion = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityQuizBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        showDefaultDialog()
 
 
 
-        val mProgressBar: ProgressBar = findViewById<View>(R.id.progressbar) as ProgressBar
-        mProgressBar.progress = i
-        mCountDownTimer= object : CountDownTimer(5000, 500) {
-            override fun onTick(millisUntilFinished: Long) {
-                Log.v("Log_tag", "Tick of Progress$i$millisUntilFinished")
-                i++
-                mProgressBar.progress = i * 100 / (5000 / 500)
-            }
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
 
-            override fun onFinish() {
-                CurrentQuestion++
-                binding.currentNumber.text = CurrentQuestion.toString()
-                if (CurrentQuestion==5){
-                    val intent = Intent(this@QuizActivity,ResultActivity::class.java)
-                    startActivity(intent)
-                    finish()
+        binding.btnSubmit.setOnClickListener {
+            mCurrentQuestion++
+            mCountDownTimer?.start()
+        }
+        binding.maxNumber.text = maxNumberOfQuestion.toString()
+
+
+    }
+    private fun showDefaultDialog() {
+        val alertDialog = AlertDialog.Builder(this)
+
+        alertDialog.apply {
+            setTitle("Note")
+            setMessage("If you are ready click OK\n")
+            setPositiveButton("OK") { _, _ ->
+
+                //progress bar animate code
+                binding.progressbar.progress = i
+                mCountDownTimer = object : CountDownTimer(10000, 50) {
+                    override fun onTick(millisUntilFinished: Long) {
+                        i++
+                        binding.progressbar.progress = 100 - (i * 100 / (10000 / 50))
+                    }
+
+                    override fun onFinish() {
+
+                        if (mCurrentQuestion == maxNumberOfQuestion) {
+                            binding.currentNumber.text = maxNumberOfQuestion.toString()
+                            val intent = Intent(this@QuizActivity, ResultActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        mCurrentQuestion++
+                        binding.currentNumber.text = mCurrentQuestion.toString()
+                        binding.progressbar.progress = 100
+                        i = 0
+                        mCountDownTimer?.start()
+                    }
                 }
-                mProgressBar.progress = 0
-                i=0
                 mCountDownTimer?.start()
             }
-        }
-        mCountDownTimer?.start()
+            setNeutralButton("Cancel") { _, _ ->
+                finish()
+            }
+        }.create().show()
     }
 }
+
+
+

@@ -4,15 +4,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="@color/main_background"
     android:layout_height="match_parent"
+    android:weightSum="3"
     tools:context=".MainActivity">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_gravity="center"
+    android:layout_weight="1"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filledTextField"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="64dp"
+        app:boxStrokeColor="@color/white"
+        android:textColorHint="#AAA8A8"
+        app:boxBackgroundColor="#07FFFFFF"
+        android:hint="Enter name">
+
+        <!--this is the actual edit text which takes the input-->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_text"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cornerRadius="10dp"
-        android:paddingVertical="10dp"
+        android:layout_marginTop="32dp"
+        android:paddingVertical="14dp"
+        android:text="@string/btn_go_to_quizactivity"
         android:backgroundTint="#3F9FFE"
         android:layout_marginHorizontal="40dp"/>
+</LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 </LinearLayout>
