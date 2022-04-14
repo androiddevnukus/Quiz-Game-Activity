@@ -3,27 +3,26 @@ package uz.project.myquizgame
 
 object Constants {
 
-    const val TOTAL_QUESTIONS: String = "total_questions"
-    const val CORRECT_ANSWERS: String = "correct_answers"
+    const val MAX_NUMBER_OF_QUESTION = 5
 
-    fun getQuestionsLevel1(): ArrayList<Question> {
+    fun getQuestions(): ArrayList<Question> {
         val questionsList = ArrayList<Question>()
 
         // 1
         val que1 = Question(
             1,
-            "...... many stars in the sky.",
-            "Are there", "Is there",
-            "There is", "There are", 4
+            "USA ?",
+            "St.Peterburg", "Moscow",
+            "Tashkent", "Peter", 4
         )
         questionsList.add(que1)
 
         // 2
         val que2 = Question(
             2,
-            "..... an aquarium in the room. ",
-            "Are there", "There is ",
-            "There are", "Is there", 2
+            "Russia ?" ,
+            "St.Peterburg", "Moscow",
+            "English", "Peter", 2
         )
 
         questionsList.add(que2)
@@ -31,9 +30,9 @@ object Constants {
         // 3
         val que3 = Question(
             3,
-            "...... any frogs around the pond.",
-            "There are", "There is",
-            "Are there", "There aren't", 4
+            "Uzbekistan ?",
+            "Avropa", "Samarqand",
+            "Xorezm", "Tashkent", 4
         )
 
         questionsList.add(que3)
@@ -41,9 +40,9 @@ object Constants {
         // 4
         val que4 = Question(
             4,
-            "...... any sugar?",
-            "Is there", "Are there",
-            "There isn't", "There is", 1
+            "Kazakhstan ?",
+            "Nursultan", "Astana",
+            "Nukus", "Almati", 1
         )
 
         questionsList.add(que4)
@@ -51,9 +50,9 @@ object Constants {
         // 5
         val que5 = Question(
             5,
-            "...... any snow.",
-            "Is there", "There isn't",
-            "Are there", "There aren't", 2
+            "Tajikistan ?",
+            "StStst", "Xojeli",
+            "Indonezia", "Turkmenistan", 2
         )
 
         questionsList.add(que5)
