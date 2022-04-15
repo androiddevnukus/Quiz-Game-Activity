@@ -10,4 +10,7 @@
     <color name="main_background">#333862</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#FFFFFF</color>
     <color name="button_alpha">#22FFFFFF</color>
+    <color name="answer_correct">#5900FF2A</color>
+    <color name="answer_wrong">#22FF0031</color>
+    <color name="selected_color">#74FFEA00</color>
 </resources>

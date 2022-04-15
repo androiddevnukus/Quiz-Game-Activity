@@ -1,110 +1,245 @@
 package uz.project.myquizgame
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import uz.project.myquizgame.databinding.ActivityQuizBinding
 
 
-class QuizActivity : AppCompatActivity() {
+class QuizActivity : AppCompatActivity(), View.OnClickListener {
 
-    var mCountDownTimer: CountDownTimer? = null
-    var i = 0
-    var mCurrentQuestion = 1
+    private var mCurrentPosition: Int = 1
+    private var mQuestionsList: ArrayList<Question>? = null
     private lateinit var binding: ActivityQuizBinding
-    var questions = Constants.getQuestions()
+    private var mSelectedOptionPosition: Int = 0
+    private var mCorrectAnswers: Int = 0
+
+    //for progressbar
+    private var i = 0
+    var mCountDownTimer: CountDownTimer? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityQuizBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        showDefaultDialog()
-        changeQuestion(mCurrentQuestion - 1)
+        mQuestionsList = Constants.getQuestions()
+        setQuestion()
 
+        //progressbar animate
+        binding.progressbar.progress = i
+        mCountDownTimer = object : CountDownTimer(15000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                i++
+                binding.timerTv.text = i.toString()
+                binding.progressbar.progress = 100 - (i * 100 / (15000 / 1000))
+            }
+
+            override fun onFinish() {
+                //Do what you want
+                submitFunc()
+                binding.progressbar.progress = 100
+                mCountDownTimer?.start()
+            }
+        }
+
+
+        //alertdialog
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Note")
+        builder.setMessage("If you are ready click OK button")
+        builder.setPositiveButton("Yes") { dialog, which ->
+            mCountDownTimer?.start()
+        }
+
+        builder.setNeutralButton("No") { dialog, which ->
+            finish()
+        }
+        builder.show()
 
         binding.btnBack.setOnClickListener {
             finish()
         }
 
-        binding.btnSubmit.setOnClickListener {
-            mCountDownTimer?.cancel()
-            mCurrentQuestion++
-            changeQuestion(mCurrentQuestion - 1)
-            binding.currentNumber.text = mCurrentQuestion.toString()
-            binding.progressbar.progress = 0
-            i = 0
-            mCountDownTimer?.start()
-        }
-        binding.maxNumber.text = Constants.MAX_NUMBER_OF_QUESTION.toString()
-
-        binding.progressbar.progress = i
-        mCountDownTimer = object : CountDownTimer(10000, 10) {
-            override fun onTick(millisUntilFinished: Long) {
-                i++
-                binding.progressbar.progress = 100 - (i * 100 / (10000 / 10))
-                Log.v("TTTT", "OnTiCK")
-            }
-
-            override fun onFinish() {
-                Log.v("TTTT", "$mCurrentQuestion")
-                if (mCurrentQuestion == questions.size) {
-                    val intent = Intent(this@QuizActivity,ResultActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                    binding.currentNumber.text = Constants.MAX_NUMBER_OF_QUESTION.toString()
-                } else {
-                    mCurrentQuestion++
-                    changeQuestion(mCurrentQuestion - 1)
-                    binding.currentNumber.text = mCurrentQuestion.toString()
-                    binding.progressbar.progress = 0
-                    i = 0
-                    mCountDownTimer?.start()
-                }
-            }
-        }
-
-
+        binding.tvOptionOne.setOnClickListener(this)
+        binding.tvOptionTwo.setOnClickListener(this)
+        binding.tvOptionThree.setOnClickListener(this)
+        binding.tvOptionFour.setOnClickListener(this)
+        binding.btnSubmit.setOnClickListener(this)
     }
 
-    private fun showDefaultDialog() {
-        val alertDialog = AlertDialog.Builder(this)
+    //added new func
+    private fun setClickable(bool: Boolean) {
+        binding.tvOptionOne.isClickable = bool
+        binding.tvOptionTwo.isClickable = bool
+        binding.tvOptionThree.isClickable = bool
+        binding.tvOptionFour.isClickable = bool
+    }
 
-        alertDialog.apply {
-            setTitle("Note")
-            setMessage("If you are ready click OK\n")
-            setPositiveButton("OK") { _, _ ->
+    override fun onClick(v: View?) {
+        //added
+        setClickable(false)
 
-                //progress bar animate code
+        mCountDownTimer?.cancel()
 
-                mCountDownTimer?.start()
+        //added
+        if (mCurrentPosition == mQuestionsList!!.size) {
+            binding.btnSubmit.text = "Finish"
+        } else {
+            binding.btnSubmit.text = "Next"
+        }
+
+
+        when (v?.id) {
+            R.id.tv_option_one -> {
+                selectedOptionView(binding.tvOptionOne, 1)
+                myFunc()
             }
-            setNeutralButton("Cancel") { _, _ ->
+            R.id.tv_option_two -> {
+                selectedOptionView(binding.tvOptionTwo, 2)
+                myFunc()
+            }
+            R.id.tv_option_three -> {
+                selectedOptionView(binding.tvOptionThree, 3)
+                myFunc()
+            }
+            R.id.tv_option_four -> {
+                selectedOptionView(binding.tvOptionFour, 4)
+                myFunc()
+            }
+            R.id.btn_submit -> {
+                mCountDownTimer?.start()
+                submitFunc()
+            }
+        }
+    }
+
+    private fun submitFunc() {
+        i = 0
+        mCurrentPosition++
+        binding.currentNumber.text = mCurrentPosition.toString()
+        when {
+            mCurrentPosition <= mQuestionsList!!.size -> {
+                setQuestion()
+            }
+            else -> {
+                val name = intent.getStringExtra("name")
+                val intent =
+                    Intent(this, ResultActivity::class.java)
+                intent.putExtra(Constants.CORRECT_ANSWERS, mCorrectAnswers)
+                intent.putExtra("nameperson", name)
+                intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionsList!!.size)
+                startActivity(intent)
+                mCountDownTimer?.cancel()
                 finish()
             }
-        }.create().show()
+        }
     }
 
-    private fun changeQuestion(number: Int) {
-        binding.nameOfCountry.text = questions[number].questionEng
-        binding.btnOne.text = questions[number].optionOne
-        binding.btnTwo.text = questions[number].optionTwo
-        binding.btnThree.text = questions[number].optionThree
-        binding.btnFour.text = questions[number].optionFour
-    }
+    private fun myFunc() {
+        val question = mQuestionsList?.get(mCurrentPosition - 1)
 
-
-    private fun changeBack(id: Int){
-
-        binding.apply {
-
+        if (question!!.correctAnswer != mSelectedOptionPosition) {
+            answerView(mSelectedOptionPosition, R.drawable.wrong_answer)
+        } else {
+            mCorrectAnswers++
         }
 
+        answerView(question.correctAnswer, R.drawable.correct_answer)
+
+        if (mCurrentPosition == mQuestionsList!!.size) {
+            binding.btnSubmit.text = "Finish"
+        } else {
+            binding.btnSubmit.text = "Next"
+        }
+
+        mSelectedOptionPosition = 0
+
+    }
+
+
+    private fun setQuestion() {
+        setClickable(true)
+
+
+        val question =
+            mQuestionsList!![mCurrentPosition - 1]
+        defaultOptionsView()
+
+        if (mCurrentPosition == mQuestionsList!!.size) {
+            binding.btnSubmit.text = "Finish"
+        } else {
+            binding.btnSubmit.text = "Next"
+        }
+
+        binding.nameOfCountry.text = question.questionEng
+        binding.tvOptionOne.text = question.optionOne
+        binding.tvOptionTwo.text = question.optionTwo
+        binding.tvOptionThree.text = question.optionThree
+        binding.tvOptionFour.text = question.optionFour
+    }
+
+    private fun selectedOptionView(tv: TextView, selectedOptionNum: Int) {
+
+        defaultOptionsView()
+
+        mSelectedOptionPosition = selectedOptionNum
+
+        tv.setTextColor(
+            Color.parseColor("#FFFFFF")
+        )
+    }
+
+    private fun defaultOptionsView() {
+
+        val options = ArrayList<TextView>()
+        options.add(0, binding.tvOptionOne)
+        options.add(1, binding.tvOptionTwo)
+        options.add(2, binding.tvOptionThree)
+        options.add(3, binding.tvOptionFour)
+
+        for (option in options) {
+            option.background = ContextCompat.getDrawable(
+                this,
+                R.drawable.default_btn
+            )
+        }
+    }
+
+    private fun answerView(answer: Int, drawableView: Int) {
+
+        when (answer) {
+
+            1 -> {
+                binding.tvOptionOne.background = ContextCompat.getDrawable(
+                    this,
+                    drawableView
+                )
+            }
+            2 -> {
+                binding.tvOptionTwo.background = ContextCompat.getDrawable(
+                    this,
+                    drawableView
+                )
+            }
+            3 -> {
+                binding.tvOptionThree.background = ContextCompat.getDrawable(
+                    this,
+                    drawableView
+                )
+            }
+            4 -> {
+                binding.tvOptionFour.background = ContextCompat.getDrawable(
+                    this,
+                    drawableView
+                )
+            }
+        }
     }
 }
-
-
-

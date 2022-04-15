@@ -30,20 +30,22 @@
 
 
         <TextView
+            android:id="@+id/name_of_person"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="26dp"
-            android:text="@string/tv_congratulations"
+            android:text="Congrats"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="32sp"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/correcttotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="24dp"
             android:gravity="center"
             android:text="Your score is 10 out of 10"
             android:textColor="@color/white" />

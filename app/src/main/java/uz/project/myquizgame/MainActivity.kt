@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
                 binding.filledTextField.error = "Please enter name"
             }else{
                 val intent = Intent(this, QuizActivity::class.java)
+                intent.putExtra("name", binding.editText.text.toString())
                 startActivity(intent)
                 finish()
             }

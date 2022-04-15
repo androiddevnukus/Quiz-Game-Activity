@@ -6,4 +6,5 @@
     <string name="menu">Menu</string>
     <string name="next">Next</string>
     <string name="btn_go_to_quizactivity">Play</string>
+    <string name="check">Check</string>
 </resources>

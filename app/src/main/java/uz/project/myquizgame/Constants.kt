@@ -3,6 +3,9 @@ package uz.project.myquizgame
 
 object Constants {
 
+
+    const val TOTAL_QUESTIONS: String = "total_questions"
+    const val CORRECT_ANSWERS: String = "correct_answers"
     const val MAX_NUMBER_OF_QUESTION = 5
 
     fun getQuestions(): ArrayList<Question> {
