@@ -15,7 +15,7 @@ import uz.project.myquizgame.databinding.ActivityQuizBinding
 class QuizActivity : AppCompatActivity(), View.OnClickListener {
 
     private var mCurrentPosition: Int = 1
-    private var mQuestionsList: ArrayList<Question>? = null
+    private var mQuestionsList: MutableList<Question>? = null
     private lateinit var binding: ActivityQuizBinding
     private var mSelectedOptionPosition: Int = 0
     private var mCorrectAnswers: Int = 0
@@ -30,8 +30,10 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityQuizBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mQuestionsList = Constants.getQuestions()
+        mQuestionsList?.shuffle()
         setQuestion()
 
+        binding.maxNumber.text = mQuestionsList!!.size.toString()
         //progressbar animate
         binding.progressbar.progress = i
         mCountDownTimer = object : CountDownTimer(15000, 1000) {
@@ -42,7 +44,6 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             override fun onFinish() {
-                //Do what you want
                 submitFunc()
                 binding.progressbar.progress = 100
                 mCountDownTimer?.start()
@@ -67,6 +68,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             finish()
         }
 
+
         binding.tvOptionOne.setOnClickListener(this)
         binding.tvOptionTwo.setOnClickListener(this)
         binding.tvOptionThree.setOnClickListener(this)
@@ -74,7 +76,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         binding.btnSubmit.setOnClickListener(this)
     }
 
-    //added new func
+    //Function when you can not click button after answer or can
     private fun setClickable(bool: Boolean) {
         binding.tvOptionOne.isClickable = bool
         binding.tvOptionTwo.isClickable = bool
@@ -83,7 +85,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        //added
+        //added recently
         setClickable(false)
 
         mCountDownTimer?.cancel()
@@ -178,7 +180,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             binding.btnSubmit.text = "Next"
         }
 
-        binding.nameOfCountry.text = question.questionEng
+        binding.nameOfCountry.text = question.question
         binding.tvOptionOne.text = question.optionOne
         binding.tvOptionTwo.text = question.optionTwo
         binding.tvOptionThree.text = question.optionThree
